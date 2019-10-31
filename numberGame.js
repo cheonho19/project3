@@ -7,7 +7,8 @@ app = new Vue({
 		falledBlockY: 0,
 		color: "rgb(0,205,205)",
 		blockdigit: 1,
-		count: 0,
+		message: "",
+		gameOver: false,
 		stage: [
 			[0,0,0,0,0,7],
 			[0,0,0,0,0,7],
@@ -21,7 +22,7 @@ app = new Vue({
 			[0,0,0,0,0,7],
 			[7,7,7,7,7,7],
 		],
-		blockcolors: [
+		blockColors: [
 			"rgb(0,205,205)",
 			"rgb(0,215,135)",
 			"rgb(255,255,130)",
@@ -36,31 +37,50 @@ app = new Vue({
 		},
 		mainLoop: function(){
 		    this.fallBlock();
-  	        setTimeout(this.mainLoop.bind(this), 500);
+  	        setTimeout(this.mainLoop.bind(this), 300);
 		},
 		fallBlock: function(){
 			if(this.stage[this.blockY+1][this.blockX] == 0){
 				this.blockY++;
 			}else{
 				this.stage[this.blockY][this.blockX] = this.blockdigit;
-				if(this.stage[this.blockY][this.blockX] == this.stage[this.blockY+1][this.blockX]) this.growBlock();
-				this.nextBlockMake();
+				this.growBlock();
+				if(this.gameOverCheck()==false){
+					this.nextBlockMake();
+				}
 			}
 		},
 		nextBlockMake: function(){
-				this.blockY = 0;
-				this.blockdigit = Math.floor(Math.random() * 6 + 1);
-				this.color = this.blockcolors[this.blockdigit-1];
+			this.blockY = 0;
+			this.blockdigit = Math.floor(Math.random() * 6 + 1);
+			this.color = this.blockColors[this.blockdigit-1];
 		},
 		checkBlockMove: function(){
 			if(this.blockX <= 0) this.blockX = 0;
 			else if(this.blockX >= 4) this.blockX = 4;
 		},
 		growBlock: function(){
-			if(this.stage[this.blockY][this.blockX] != 6){
-				this.stage[this.blockY][this.blockX] = 0;
-				this.stage[this.blockY+1][this.blockX]++;
+				for(let i=0; i<9-this.blockY; i++){
+					if(this.stage[this.blockY+i][this.blockX] != 6){
+						if(this.stage[this.blockY+i][this.blockX] == this.stage[this.blockY+i+1][this.blockX]){
+							this.stage[this.blockY+i][this.blockX] = 0;
+							this.stage[this.blockY+i+1][this.blockX]++;
+						}
+					}
+				}
+		},
+		gameOverCheck: function(){
+			for(let i=0; i<5; i++){
+				if(this.stage[0][i] != 0){
+					for(let j=0; j<10; j++){
+						for(let k=0; k<5; k++){
+							this.message = "GAME OVER";
+							return true;
+						}
+					}
+				}
 			}
+			return false;			
 		},
 	},
 })
