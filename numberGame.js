@@ -3,27 +3,32 @@ app = new Vue({
 	data: {
 		blockY: 0,
 		blockX: 2,
+		falledBlockX: 0,
+		falledBlockY: 0,
+		color: "rgb(0,205,205)",
 		blockdigit: 1,
-		blocks: [
-			{ number: 1,
-			  color: "rgb(255,0,0)",
-			},
-			{ number: 2,
-			  color: "rgb(255,127,0)",
-			},
-			{ number: 3,
-			  color: "rgb(255,255,0)",
-			},
-			{ number: 4,
-			  color: "rgb(0,255,0)",
-			},
-			{ number: 5,
-			  color: "rgb(0,0,255)",
-			},
-			{ number: 6,
-			  color: "rgb(150,0,255)",
-			},
+		count: 0,
+		stage: [
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[0,0,0,0,0,7],
+			[7,7,7,7,7,7],
 		],
+		blockcolors: [
+			"rgb(0,205,205)",
+			"rgb(0,215,135)",
+			"rgb(255,255,130)",
+			"rgb(255,145,75)",
+			"rgb(255,150,215)",
+			"rgb(255,45,70)",
+		]
 	},
 	methods: {
 		startGame: function(){
@@ -34,14 +39,32 @@ app = new Vue({
   	        setTimeout(this.mainLoop.bind(this), 500);
 		},
 		fallBlock: function(){
-			this.blockY++;
+			if(this.stage[this.blockY+1][this.blockX] == 0){
+				this.blockY++;
+			}else{
+				this.stage[this.blockY][this.blockX] = this.blockdigit;
+				if(this.stage[this.blockY][this.blockX] == this.stage[this.blockY+1][this.blockX]) this.growBlock();
+				this.nextBlockMake();
+			}
 		},
-		moveleft: function(){
-			console.log(this.blockX);
-			this.blockX--;
+		nextBlockMake: function(){
+				this.blockY = 0;
+				this.blockdigit = Math.floor(Math.random() * 6 + 1);
+				this.color = this.blockcolors[this.blockdigit-1];
+		},
+		checkBlockMove: function(){
+			if(this.blockX <= 0) this.blockX = 0;
+			else if(this.blockX >= 4) this.blockX = 4;
+		},
+		growBlock: function(){
+			if(this.stage[this.blockY][this.blockX] != 6){
+				this.stage[this.blockY][this.blockX] = 0;
+				this.stage[this.blockY+1][this.blockX]++;
+			}
 		},
 	},
 })
-	document.onkeydown = function(e) {
-		app.blockX--;
-	  }
+document.onkeydown = function(e) {
+	if(e.keyCode == 37) app.blockX--;
+	else if(e.keyCode == 39) app.blockX++;
+}
