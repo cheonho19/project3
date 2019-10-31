@@ -7,7 +7,7 @@
 <body>
 	<div id="app">
 		<div>
-		<svg width=600 height=600>
+		<svg width=550 height=550>
 			<rect width=500 height=500 fill="rgb(100,100,100)"></rect>
 			<rect :x="blockX*100" :y="blockY*50" width=100 height=50 :fill="color" stroke="black" stroke-width="3"></rect>
 			<text :x="blockX*100+45" :y="blockY*50+30" stroke="black">{{blockdigit}}</text>
@@ -27,6 +27,7 @@
 					<text v-if="el==6" :x="j*100+45" :y="i*50+30" stroke="black">6</text>
 				</g>
 			</g>
+			<text x=250 y=250 stroke="black" text-anchor="middle">{{message}}</text> 
 		</svg>
 		</div>
 		<button @click="startGame">START</button>
