@@ -7,27 +7,32 @@
 <body>
 	<div id="app">
 		<div>
-		<svg width=550 height=550>
+		<svg width=700 height=550>
 			<rect width=500 height=500 fill="rgb(100,100,100)"></rect>
-			<rect :x="blockX*100" :y="blockY*50" width=100 height=50 :fill="color" stroke="black" stroke-width="3"></rect>
+			<rect :x="blockX*100" :y="blockY*50" width=100 height=50 :fill="color" stroke="black" stroke-width="1"></rect>
 			<text :x="blockX*100+45" :y="blockY*50+30" stroke="black">{{blockdigit}}</text>
 			<g v-for="(row,i) in stage">
 				<g v-for="(el,j) in row">
-					<rect v-if="el==1" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(0,205,205)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==1" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(0,205,205)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==1" :x="j*100+45" :y="i*50+30" stroke="black">1</text>
-					<rect v-if="el==2" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(0,215,135)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==2" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(0,215,135)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==2" :x="j*100+45" :y="i*50+30" stroke="black">2</text>
-					<rect v-if="el==3" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,255,130)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==3" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,255,130)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==3" :x="j*100+45" :y="i*50+30" stroke="black">3</text>
-					<rect v-if="el==4" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,145,75)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==4" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,145,75)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==4" :x="j*100+45" :y="i*50+30" stroke="black">4</text>
-					<rect v-if="el==5" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,150,215)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==5" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,150,140)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==5" :x="j*100+45" :y="i*50+30" stroke="black">5</text>
-					<rect v-if="el==6" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,45,70)" stroke="black" stroke-width="3"></rect>
+					<rect v-if="el==6" :x="j*100" :y="i*50" width=100 height=50 fill="rgb(255,95,95)" stroke="black" stroke-width="1"></rect>
 					<text v-if="el==6" :x="j*100+45" :y="i*50+30" stroke="black">6</text>
 				</g>
 			</g>
 			<text x=250 y=250 stroke="black" text-anchor="middle">{{message}}</text> 
+			<rect x=530 y=0 width=150 height=150 fill="rgb(100,100,100)"></rect>
+			<text x=535 y=20 stroke="black">NEXT</text>
+			<rect x=555 y=50 width=100 height=50 :fill="nextColor" stroke="black" stroke-width="1"></rect>
+			<text x=600 y=80 stroke="black">{{nextBlock}}</text>
+			<text x=530 y=180 stroke="black">score: {{score}}</text>
 		</svg>
 		</div>
 		<button @click="startGame">START</button>
