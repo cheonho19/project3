@@ -13,6 +13,7 @@ app = new Vue({
 		gameOver: false,
 		score: 0,
 		count: 0,
+		temp: 0,
 		stage: [
 			[0,0,0,0,0,7],
 			[0,0,0,0,0,7],
@@ -41,8 +42,7 @@ app = new Vue({
 		},
 		mainLoop: function(){
 		    this.fallBlock();
-			this.linedelete();
-  	        setTimeout(this.mainLoop.bind(this), 500);
+  	        setTimeout(this.mainLoop.bind(this), 300);
 		},
 		fallBlock: function(){
 			if(this.stage[this.blockY+1][this.blockX] == 0){
@@ -50,6 +50,7 @@ app = new Vue({
 			}else{
 				this.stage[this.blockY][this.blockX] = this.blockdigit;
 				this.growBlock();
+				this.linedelete();
 				if(this.gameOverCheck()==false){
 					this.nextBlockMake();
 				}
@@ -59,7 +60,7 @@ app = new Vue({
 			this.blockY = 0;
 			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
-			this.nextBlock = Math.floor(Math.random() * 6 + 1);
+			this.nextBlock = Math.floor(Math.random() * 3 + 1);
 			this.nextColor = this.blockColors[this.nextBlock-1];
 		},
 		checkBlockMove: function(){
@@ -100,10 +101,11 @@ app = new Vue({
 				if(this.count==4){
 					for(let k=i; k>1; k--){
 						for(let l=0; l<5; l++){
-							this.stage[k][l]==this.stage[k-1][l];
+							this.stage[k][l]=this.stage[k-1][l];
 						}
 					}
 				}
+				this.count = 0;
 			}
 		}, 
 		scoreCalculate: function(){
