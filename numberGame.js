@@ -60,7 +60,7 @@ app = new Vue({
 			this.blockY = 0;
 			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
-			this.nextBlock = Math.floor(Math.random() * 6 + 1);
+			this.nextBlock = Math.floor(Math.random() * 2 + 1);
 			this.nextColor = this.blockColors[this.nextBlock-1];
 		},
 		checkBlockMove: function(){
@@ -99,14 +99,14 @@ app = new Vue({
 					}
 				}
 				if(this.count==4){
-					for(let k=i; k>1; k--){
+					for(let k=i; k>0; k--){
 						for(let l=0; l<5; l++){
 							this.stage[k][l]=this.stage[k-1][l];
 						}
 					}
+					this.score = this.score + 100;
 				}
 				this.count = 0;
-				this.score = this.score + 100;
 			}
 		}, 
 		scoreCalculate: function(){
