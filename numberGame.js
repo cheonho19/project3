@@ -6,9 +6,13 @@ app = new Vue({
 		falledBlockX: 0,
 		falledBlockY: 0,
 		color: "rgb(0,205,205)",
+		nextColor: "rgb(0,215,135)",
 		blockdigit: 1,
+		nextBlock: 2,
 		message: "",
 		gameOver: false,
+		score: 0,
+		count: 0,
 		stage: [
 			[0,0,0,0,0,7],
 			[0,0,0,0,0,7],
@@ -27,8 +31,8 @@ app = new Vue({
 			"rgb(0,215,135)",
 			"rgb(255,255,130)",
 			"rgb(255,145,75)",
-			"rgb(255,150,215)",
-			"rgb(255,45,70)",
+			"rgb(255,150,140)",
+			"rgb(255,95,95)",
 		]
 	},
 	methods: {
@@ -37,7 +41,8 @@ app = new Vue({
 		},
 		mainLoop: function(){
 		    this.fallBlock();
-  	        setTimeout(this.mainLoop.bind(this), 300);
+			this.linedelete();
+  	        setTimeout(this.mainLoop.bind(this), 500);
 		},
 		fallBlock: function(){
 			if(this.stage[this.blockY+1][this.blockX] == 0){
@@ -52,8 +57,10 @@ app = new Vue({
 		},
 		nextBlockMake: function(){
 			this.blockY = 0;
-			this.blockdigit = Math.floor(Math.random() * 6 + 1);
+			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
+			this.nextBlock = Math.floor(Math.random() * 6 + 1);
+			this.nextColor = this.blockColors[this.nextBlock-1];
 		},
 		checkBlockMove: function(){
 			if(this.blockX <= 0) this.blockX = 0;
@@ -65,6 +72,7 @@ app = new Vue({
 						if(this.stage[this.blockY+i][this.blockX] == this.stage[this.blockY+i+1][this.blockX]){
 							this.stage[this.blockY+i][this.blockX] = 0;
 							this.stage[this.blockY+i+1][this.blockX]++;
+							this.score = this.score + 10;
 						}
 					}
 				}
@@ -82,6 +90,33 @@ app = new Vue({
 			}
 			return false;			
 		},
+		linedelete: function(){
+			for(let i=0; i<10; i++){
+				for(let j=0; j<4; j++){
+					if(this.stage[i][j]==this.stage[i][j+1] && this.stage[i][j]!=0){
+						this.count++;
+					}
+				}
+				if(this.count==4){
+					for(let k=i; k>1; k--){
+						for(let l=0; l<5; l++){
+							this.stage[k][l]==this.stage[k-1][l];
+						}
+					}
+				}
+			}
+		}, 
+		scoreCalculate: function(){
+
+		},
+	/*	restart: function(){
+			for(let j=0; j<10; j++){
+				for(let k=0; k<5; k++){
+					this.stage[j][k] = 0;
+					this.startGame();
+				}
+			}
+		},  */
 	},
 })
 document.onkeydown = function(e) {
