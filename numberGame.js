@@ -42,7 +42,7 @@ app = new Vue({
 		},
 		mainLoop: function(){
 		    this.fallBlock();
-  	        setTimeout(this.mainLoop.bind(this), 300);
+  	        setTimeout(this.mainLoop.bind(this), 500);
 		},
 		fallBlock: function(){
 			if(this.stage[this.blockY+1][this.blockX] == 0){
@@ -60,7 +60,7 @@ app = new Vue({
 			this.blockY = 0;
 			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
-			this.nextBlock = Math.floor(Math.random() * 3 + 1);
+			this.nextBlock = Math.floor(Math.random() * 6 + 1);
 			this.nextColor = this.blockColors[this.nextBlock-1];
 		},
 		checkBlockMove: function(){
@@ -106,6 +106,7 @@ app = new Vue({
 					}
 				}
 				this.count = 0;
+				this.score = this.score + 100;
 			}
 		}, 
 		scoreCalculate: function(){
