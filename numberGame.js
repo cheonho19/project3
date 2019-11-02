@@ -13,10 +13,6 @@ app = new Vue({
 		gameOver: false,
 		score: 0,
 		count: 0,
-		ballnumber: 2,
-		ballX: 2,
-		ballY: -1,
-		currentfall: "block",
 		stage: [
 			[0,0,0,0,0],
 			[0,0,0,0,0],
@@ -44,12 +40,7 @@ app = new Vue({
 			this.mainLoop();
 		},
 		mainLoop: function(){
-			if(this.currentfall=="block"){
-		    	this.fallBlock();
-		    }else if(this.currentfall=="ball"){
-		    	this.blockY = -1;
-		    	this.fallBall();
-		    }
+			this.fallBlock();
   	       	setTimeout(this.mainLoop.bind(this), 500);	        
 		},
 		fallBlock: function(){
@@ -113,36 +104,10 @@ app = new Vue({
 						}
 					}
 					this.score = this.score + 100;
-					this.ball++;
 				}
 				this.count = 0;
 			}
 		}, 
-		ChangeToBall: function(){
-			this.ballnumber--;
-			this.currentfall = "ball";
-		},
-		fallBall: function(){
-			if(this.stage[this.ballY+1][this.ballX] == 0){
-				this.ballY++;
-			}else{
-				this.deleteBlock();
-				this.ballY = -1;
-				this.currentfall = "block";
-			}						
-		},
-		deleteBlock: function(){
-			for(let i=0; i<10; i++){
-				for(let j=0; j<5; j++){
-					if(this.stage[i][j]==this.stage[this.ballY+1][this.ballX]){
-						for(let k=i; k>0; k--){
-							this.stage[k][j] = this.stage[k-1][j];
-						}
-					}
-				}
-			}
-			this.stage[this.ballY+1][this.ballX] = 0;
-		}
 	/*	restart: function(){
 			for(let j=0; j<10; j++){
 				for(let k=0; k<5; k++){
