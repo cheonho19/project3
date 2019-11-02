@@ -13,19 +13,22 @@ app = new Vue({
 		gameOver: false,
 		score: 0,
 		count: 0,
-		temp: 0,
+		ballnumber: 2,
+		ballX: 2,
+		ballY: -1,
+		currentfall: "block",
 		stage: [
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[0,0,0,0,0,7],
-			[7,7,7,7,7,7],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[0,0,0,0,0],
+			[7,7,7,7,7],
 		],
 		blockColors: [
 			"rgb(0,205,205)",
@@ -41,8 +44,13 @@ app = new Vue({
 			this.mainLoop();
 		},
 		mainLoop: function(){
-		    this.fallBlock();
-  	        setTimeout(this.mainLoop.bind(this), 500);
+			if(this.currentfall=="block"){
+		    	this.fallBlock();
+		    }else if(this.currentfall=="ball"){
+		    	this.blockY = -1;
+		    	this.fallBall();
+		    }
+  	       	setTimeout(this.mainLoop.bind(this), 500);	        
 		},
 		fallBlock: function(){
 			if(this.stage[this.blockY+1][this.blockX] == 0){
@@ -50,7 +58,7 @@ app = new Vue({
 			}else{
 				this.stage[this.blockY][this.blockX] = this.blockdigit;
 				this.growBlock();
-				this.linedelete();
+				this.lineDelete();
 				if(this.gameOverCheck()==false){
 					this.nextBlockMake();
 				}
@@ -60,7 +68,7 @@ app = new Vue({
 			this.blockY = 0;
 			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
-			this.nextBlock = Math.floor(Math.random() * 2 + 1);
+			this.nextBlock = Math.floor(Math.random() * 6 + 1);
 			this.nextColor = this.blockColors[this.nextBlock-1];
 		},
 		checkBlockMove: function(){
@@ -91,7 +99,7 @@ app = new Vue({
 			}
 			return false;			
 		},
-		linedelete: function(){
+		lineDelete: function(){
 			for(let i=0; i<10; i++){
 				for(let j=0; j<4; j++){
 					if(this.stage[i][j]==this.stage[i][j+1] && this.stage[i][j]!=0){
@@ -105,13 +113,36 @@ app = new Vue({
 						}
 					}
 					this.score = this.score + 100;
+					this.ball++;
 				}
 				this.count = 0;
 			}
 		}, 
-		scoreCalculate: function(){
-
+		ChangeToBall: function(){
+			this.ballnumber--;
+			this.currentfall = "ball";
 		},
+		fallBall: function(){
+			if(this.stage[this.ballY+1][this.ballX] == 0){
+				this.ballY++;
+			}else{
+				this.deleteBlock();
+				this.ballY = -1;
+				this.currentfall = "block";
+			}						
+		},
+		deleteBlock: function(){
+			for(let i=0; i<10; i++){
+				for(let j=0; j<5; j++){
+					if(this.stage[i][j]==this.stage[this.ballY+1][this.ballX]){
+						for(let k=i; k>0; k--){
+							this.stage[k][j] = this.stage[k-1][j];
+						}
+					}
+				}
+			}
+			this.stage[this.ballY+1][this.ballX] = 0;
+		}
 	/*	restart: function(){
 			for(let j=0; j<10; j++){
 				for(let k=0; k<5; k++){
@@ -123,6 +154,15 @@ app = new Vue({
 	},
 })
 document.onkeydown = function(e) {
-	if(e.keyCode == 37) app.blockX--;
-	else if(e.keyCode == 39) app.blockX++;
+	if(e.keyCode == 37){
+		if(app.stage[app.blockY][app.blockX-1]==0){
+			app.blockX--;
+			app.ballX--;
+		}
+	}else if(e.keyCode == 39){
+		if(app.stage[app.blockY][app.blockX+1]==0){
+			app.blockX++;
+			app.ballX++;
+		}
+	}
 }
