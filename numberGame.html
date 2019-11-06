@@ -29,13 +29,15 @@
 			</g>
 			<text x=250 y=250 stroke="black" text-anchor="middle">{{message}}</text> 
 			<rect x=530 y=0 width=150 height=150 fill="rgb(100,100,100)"></rect>
-			<text x=535 y=20 stroke="black">NEXT</text>
+			<text x=535 y=20 fill="white">NEXT</text>
 			<rect x=555 y=50 width=100 height=50 :fill="nextColor" stroke="black" stroke-width="1"></rect>
 			<text x=600 y=80 stroke="black">{{nextBlock}}</text>
-			<text x=530 y=180 stroke="black">score: {{score}}</text>
+			<text x=530 y=180 fill="white">score: {{score}}</text>
 		</svg>
 		</div>
 		<button @click="startGame">START</button>
+		<br>
+		<button @click="restart" v-if="gameOver">RESTART</button>
 	</div>
 	<script src="numberGame.js"></script>
 </body>

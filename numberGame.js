@@ -57,6 +57,7 @@ app = new Vue({
 		},
 		nextBlockMake: function(){
 			this.blockY = 0;
+			this.blockX = 2;
 			this.blockdigit = this.nextBlock;
 			this.color = this.blockColors[this.blockdigit-1];
 			this.nextBlock = Math.floor(Math.random() * 6 + 1);
@@ -83,6 +84,7 @@ app = new Vue({
 					for(let j=0; j<10; j++){
 						for(let k=0; k<5; k++){
 							this.message = "GAME OVER";
+							this.gameOver = true;
 							return true;
 						}
 					}
@@ -108,26 +110,27 @@ app = new Vue({
 				this.count = 0;
 			}
 		}, 
-	/*	restart: function(){
+		restart: function(){
 			for(let j=0; j<10; j++){
 				for(let k=0; k<5; k++){
-					this.stage[j][k] = 0;
-					this.startGame();
+					this.stage[j].splice(k,1,0);
 				}
 			}
-		},  */
+			this.startGame();
+			this.message = "";
+			this.score = 0;
+			this.gameOver = false;
+		},  
 	},
 })
 document.onkeydown = function(e) {
 	if(e.keyCode == 37){
 		if(app.stage[app.blockY][app.blockX-1]==0){
 			app.blockX--;
-			app.ballX--;
 		}
 	}else if(e.keyCode == 39){
 		if(app.stage[app.blockY][app.blockX+1]==0){
 			app.blockX++;
-			app.ballX++;
 		}
 	}
 }
