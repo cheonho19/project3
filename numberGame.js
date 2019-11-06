@@ -44,17 +44,26 @@ app = new Vue({
   	       	setTimeout(this.mainLoop.bind(this), 500);	        
 		},
 		fallBlock: function(){
-			if(this.stage[this.blockY+1][this.blockX] == 0){
-				this.blockY++;
-			}else{
-				this.stage[this.blockY][this.blockX] = this.blockdigit;
-				this.growBlock();
-				this.lineDelete();
-				if(this.gameOverCheck()==false){
-					this.nextBlockMake();
-				}
-			}
-		},
+            console.log("abc");
+            if(this.stage[this.blockY+1][this.blockX] == 0){
+                this.blockY++;
+            }else{
+                this.stage[this.blockY][this.blockX] = this.blockdigit;
+                let changed = true;
+                while (changed){
+                    changed = false;
+                    if (this.verticalDelete()){
+                        changed = true;
+                    }
+                    if (this.lineDelete()){
+                        changed = true;
+                    }
+                }
+                if(this.gameOverCheck()==false){
+                    this.nextBlockMake();
+                }
+            }
+        },
 		nextBlockMake: function(){
 			this.blockY = 0;
 			this.blockX = 2;
@@ -67,17 +76,20 @@ app = new Vue({
 			if(this.blockX <= 0) this.blockX = 0;
 			else if(this.blockX >= 4) this.blockX = 4;
 		},
-		growBlock: function(){
-				for(let i=0; i<9-this.blockY; i++){
-					if(this.stage[this.blockY+i][this.blockX] != 6){
-						if(this.stage[this.blockY+i][this.blockX] == this.stage[this.blockY+i+1][this.blockX]){
-							this.stage[this.blockY+i][this.blockX] = 0;
-							this.stage[this.blockY+i+1][this.blockX]++;
-							this.score = this.score + 10;
-						}
-					}
-				}
-		},
+		verticalDelete: function(){
+            let changed = false;
+            for(let i=this.blockY; i<9; i++){
+  		        for (let j=0; j < 5; j++){
+  	                if(this.stage[i][j] != 6 && this.stage[i][j] == this.stage[i+1][j] && this.stage[i][j]!=0){
+                        this.stage[i].splice(j,1,0);
+						this.stage[i+1].splice(j,1,this.stage[i+1][j]+1);
+                        this.score = this.score + 10;
+                        changed = true;
+                    }
+                }
+            }
+            return changed;
+        },
 		gameOverCheck: function(){
 			for(let i=0; i<5; i++){
 				if(this.stage[0][i] != 0){
@@ -93,23 +105,26 @@ app = new Vue({
 			return false;			
 		},
 		lineDelete: function(){
-			for(let i=0; i<10; i++){
-				for(let j=0; j<4; j++){
-					if(this.stage[i][j]==this.stage[i][j+1] && this.stage[i][j]!=0){
-						this.count++;
-					}
-				}
-				if(this.count==4){
-					for(let k=i; k>0; k--){
-						for(let l=0; l<5; l++){
-							this.stage[k][l]=this.stage[k-1][l];
-						}
-					}
-					this.score = this.score + 100;
-				}
-				this.count = 0;
-			}
-		}, 
+            let changed = false;
+            for(let i=0; i<10; i++){
+                for(let j=0; j<4; j++){
+                    if(this.stage[i][j]==this.stage[i][j+1] && this.stage[i][j]!=0){
+                        this.count++;
+                    }
+                }
+                if(this.count==4){
+                    changed = true;
+                    for(let k=i; k>0; k--){
+                        for(let l=0; l<5; l++){
+                            this.stage[k][l]=this.stage[k-1][l];
+                        }
+                    }
+                    this.score = this.score + 100;
+                }
+                this.count = 0;
+            }
+            return changed;
+        },
 		restart: function(){
 			for(let j=0; j<10; j++){
 				for(let k=0; k<5; k++){
